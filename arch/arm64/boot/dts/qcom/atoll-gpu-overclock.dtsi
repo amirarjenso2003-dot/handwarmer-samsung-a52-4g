@@ -1,1 +1,110 @@
-y
+/* GPU Overclock Patch for Adreno 618 - SM7125/a52q */
+&soc {
+	gpu_opp_table_overclock: gpu_opp_table_overclock {
+		compatible = "operating-points-v2";
+
+		/* Turbo+ 680MHz - Maximum Safe Overclock */
+		opp-680000000 {
+			opp-hz = /bits/ 64 <680000000>;
+			opp-microvolt = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
+			opp-peak-kbps = <12800000>;
+		};
+
+		/* Turbo 650MHz */
+		opp-650000000 {
+			opp-hz = /bits/ 64 <650000000>;
+			opp-microvolt = <RPMH_REGULATOR_LEVEL_TURBO>;
+			opp-peak-kbps = <12000000>;
+		};
+
+		/* Turbo+ 610MHz */
+		opp-610000000 {
+			opp-hz = /bits/ 64 <610000000>;
+			opp-microvolt = <RPMH_REGULATOR_LEVEL_TURBO>;
+			opp-peak-kbps = <11200000>;
+		};
+	};
+};
+
+&msm_gpu {
+	qcom,gpu-pwrlevels {
+		compatible = "qcom,gpu-pwrlevels";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		/* 680MHz Overclock */
+		qcom,gpu-pwrlevel@0 {
+			reg = <0>;
+			qcom,gpu-freq = <680000000>;
+			qcom,bus-freq = <12>;
+			qcom,bus-min = <10>;
+			qcom,bus-max = <12>;
+		};
+
+		/* 650MHz */
+		qcom,gpu-pwrlevel@1 {
+			reg = <1>;
+			qcom,gpu-freq = <650000000>;
+			qcom,bus-freq = <11>;
+			qcom,bus-min = <10>;
+			qcom,bus-max = <12>;
+		};
+
+		/* 610MHz */
+		qcom,gpu-pwrlevel@2 {
+			reg = <2>;
+			qcom,gpu-freq = <610000000>;
+			qcom,bus-freq = <10>;
+			qcom,bus-min = <9>;
+			qcom,bus-max = <11>;
+		};
+
+		/* 565MHz (Stock) */
+		qcom,gpu-pwrlevel@3 {
+			reg = <3>;
+			qcom,gpu-freq = <565000000>;
+			qcom,bus-freq = <9>;
+			qcom,bus-min = <8>;
+			qcom,bus-max = <10>;
+		};
+
+		/* 430MHz (Stock) */
+		qcom,gpu-pwrlevel@4 {
+			reg = <4>;
+			qcom,gpu-freq = <430000000>;
+			qcom,bus-freq = <8>;
+			qcom,bus-min = <7>;
+			qcom,bus-max = <9>;
+		};
+
+		/* 355MHz (Stock) */
+		qcom,gpu-pwrlevel@5 {
+			reg = <5>;
+			qcom,gpu-freq = <355000000>;
+			qcom,bus-freq = <7>;
+			qcom,bus-min = <5>;
+			qcom,bus-max = <8>;
+		};
+
+		/* 267MHz (Stock) */
+		qcom,gpu-pwrlevel@6 {
+			reg = <6>;
+			qcom,gpu-freq = <267000000>;
+			qcom,bus-freq = <5>;
+			qcom,bus-min = <4>;
+			qcom,bus-max = <7>;
+		};
+
+		/* XO Shutdown */
+		qcom,gpu-pwrlevel@7 {
+			reg = <7>;
+			qcom,gpu-freq = <0>;
+			qcom,bus-freq = <0>;
+			qcom,bus-min = <0>;
+			qcom,bus-max = <0>;
+		};
+	};
+
+	qcom,initial-pwrlevel = <3>;
+	qcom,ca-target-pwrlevel = <4>;
+};
